@@ -10,6 +10,7 @@ public class Plane implements Comparable, Comparator{
 	//Attributes
 	private String date;
 	private String time;
+	private int realTime;
 	private String airline;
 	private int id;
 	private String end;
@@ -79,6 +80,14 @@ public class Plane implements Comparable, Comparator{
 		this.door = door;
 	}
 	
+	public int getRealTime() {
+		return realTime;
+	}
+
+	public void setRealTime(int realTime) {
+		this.realTime = realTime;
+	}
+	
 	//Methods
 	public void generateDate() {
 		
@@ -100,7 +109,7 @@ public class Plane implements Comparable, Comparator{
 	}
 	
 	public void generateTime() {
-		
+
 		String tim = "";
 		
 		Random r = new Random();
@@ -112,6 +121,24 @@ public class Plane implements Comparable, Comparator{
 		String[] a = {"a.m.", "p.m."};
 		Random aa = new Random();
 		int aaa = aa.nextInt(2);
+		
+		if(aaa == 0) {
+			if(ff >= 0 && ff < 10) {
+				tim = rr+"0"+ff;
+				setRealTime(Integer.parseInt(tim));
+			}else {
+				tim = rr+""+ff;
+				setRealTime(Integer.parseInt(tim));
+			}
+		}else {
+			if(ff >= 0 && ff < 10) {
+				tim = rr+"0"+ff+"00";
+				setRealTime(Integer.parseInt(tim));
+			}else {
+				tim = rr+""+ff+"00";
+				setRealTime(Integer.parseInt(tim));
+			}
+		}
 		
 		if(ff >= 0 && ff < 10) {
 			tim = rr +":0"+ ff +" "+ a[aaa];

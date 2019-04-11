@@ -30,7 +30,7 @@
       <Label layoutX="106.0" layoutY="18.0" text="time" />
       <Label layoutX="209.0" layoutY="18.0" text="airline" />
       <Label layoutX="285.0" layoutY="18.0" text="id" />
-      <Label layoutX="419.0" layoutY="18.0" text="end" />
+      <Label layoutX="403.0" layoutY="18.0" text="destination" />
       <Label layoutX="516.0" layoutY="18.0" text="door" />
    </children>
 </Pane>
