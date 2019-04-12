@@ -1,14 +1,23 @@
 package model;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-public class Plane implements Comparable, Comparator{
+public class Plane implements Comparable<Plane>{
 	
 	//Constants
+	public final static String RUTE_CITY = "datos/ciudades.txt";
+	public final static String RUTE_AIR = "datos/air.txt";
 	
 	//Attributes
 	private String date;
+	private double realDate;
 	private String time;
 	private int realTime;
 	private String airline;
@@ -19,7 +28,7 @@ public class Plane implements Comparable, Comparator{
 	//Relations
 	
 	//Constructors
-	public Plane(int i) {
+	public Plane(int i) throws IOException {
 		
 		setId(i);
 		
@@ -88,9 +97,18 @@ public class Plane implements Comparable, Comparator{
 		this.realTime = realTime;
 	}
 	
+	public double getRealDate() {
+		return realDate;
+	}
+
+	public void setRealDate(double realDate) {
+		this.realDate = realDate;
+	}
+	
 	//Methods
 	public void generateDate() {
 		
+		int v = 0;
 		String dt = "";
 		
 		Random r = new Random();
@@ -101,6 +119,9 @@ public class Plane implements Comparable, Comparator{
 
 		Random a = new Random();
 		int año = a.nextInt(79)+1999;
+		
+		v = año+(mes/100)+(dia/10000);
+		setRealDate(v);
 		
 		dt = dia +"/"+ mes +"/"+ año;
 		
@@ -150,21 +171,51 @@ public class Plane implements Comparable, Comparator{
 		
 	}
 	
-	public void generateAirline() {
+	public void generateAirline() throws IOException {
 		
-		String[] a = {"Avianca", "American", "LATAM", "Copa", "Delta", "SATENA", "Virgin", "Frontier", "United", "Ethiopian"};
-		Random r = new Random();
-		int d = r.nextInt(10);
-		setAirline(a[d]);
+		ArrayList<String> a = new ArrayList<String>();
+		
+		File file = new File(RUTE_AIR);
+		FileReader r = new FileReader(file);
+		BufferedReader br = new BufferedReader(r);
+		
+		String l = br.readLine();
+		while(l != null) {
+			l.trim();
+			a.add(l);
+			l = br.readLine();
+		}
+		
+		Random rand = new Random();
+		int d = rand.nextInt(a.size());
+		setAirline(a.get(d));
+		
+		br.close();
+		r.close();
 		
 	}
 	
-	public void generateEnd() {
+	public void generateEnd() throws IOException {
 		
-		String[] c = {"Kripton", "Earth-chan", "Mordor", "Narnia", "Thanos´s butthole", "you momma", "Equestria", "Mushroom Kingdom", "Hell", "Heaven", "Limbo", "Atlantis", "SS Enterprice", "Galactic Falcon", "Mother Russia blyat!"};
-		Random r = new Random();
-		int d = r.nextInt(15);
-		setEnd(c[d]);
+		ArrayList<String> a = new ArrayList<String>();
+		
+		File file = new File(RUTE_CITY);
+		FileReader r = new FileReader(file);
+		BufferedReader br = new BufferedReader(r);
+		
+		String l = br.readLine();
+		while(l != null) {
+			l.trim();
+			a.add(l);
+			l = br.readLine();
+		}
+		
+		Random rand = new Random();
+		int d = rand.nextInt(a.size());
+		setEnd(a.get(d));
+		
+		br.close();
+		r.close();
 		
 	}
 	
@@ -185,15 +236,16 @@ public class Plane implements Comparable, Comparator{
 		return info;
 		
 	}
-	
-	@Override
-	public int compare(Object a, Object b) {
-		return 0;
-	}
+
+	public static Comparator<Plane> compName = new Comparator<Plane>() {
+		public int compare(Plane p1, Plane p2) {
+			return p1.getEnd().compareTo(p2.getEnd());
+		}
+	};
 
 	@Override
-	public int compareTo(Object arg0) {
-		return 0;
+	public int compareTo(Plane p) {
+		return airline.compareTo(p.getAirline());
 	}
 	
 }

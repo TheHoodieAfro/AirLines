@@ -32,5 +32,7 @@
       <Label layoutX="285.0" layoutY="18.0" text="id" />
       <Label layoutX="403.0" layoutY="18.0" text="destination" />
       <Label layoutX="516.0" layoutY="18.0" text="door" />
+      <Label layoutX="1134.0" layoutY="89.0" text="Ordenar" />
+      <Label layoutX="131.0" layoutY="529.0" text="Buscar" />
    </children>
 </Pane>
