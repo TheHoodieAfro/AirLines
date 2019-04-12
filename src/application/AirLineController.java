@@ -29,10 +29,6 @@ public class AirLineController {
 	//Getters and Setters
 		
 	//Methods
-	public void initialize() {
-		
-	}
-	
 	public void generarVuelos(ActionEvent event) {
 		
 		if(!txtGenerar.getText().equals("") && Integer.parseInt(txtGenerar.getText()) > 0) {

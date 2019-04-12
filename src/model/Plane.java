@@ -123,7 +123,7 @@ public class Plane implements Comparable<Plane>{
 		v = año+(mes/100)+(dia/10000);
 		setRealDate(v);
 		
-		dt = dia +"/"+ mes +"/"+ año;
+		dt = año+"-"+mes+"-"+dia;
 		
 		setDate(dt);
 		
