@@ -26,6 +26,8 @@ public class Plane implements Comparable<Plane>{
 	private int door;
 	
 	//Relations
+	private Plane next;
+	private Plane back;
 	
 	//Constructors
 	public Plane(int i) throws IOException {
@@ -37,6 +39,9 @@ public class Plane implements Comparable<Plane>{
 		generateAirline();
 		generateEnd();
 		generateDoor();
+		
+		next = null;
+		back = null;
 		
 	}
 	
@@ -105,6 +110,22 @@ public class Plane implements Comparable<Plane>{
 		this.realDate = realDate;
 	}
 	
+	public Plane getNext() {
+		return next;
+	}
+	
+	public void setNext(Plane next) {
+		this.next = next;
+	}
+	
+	public Plane getBack() {
+		return back;
+	}
+	
+	public void setBack(Plane back) {
+		this.back = back;
+	}
+	
 	//Methods
 	public void generateDate() {
 		
@@ -113,12 +134,10 @@ public class Plane implements Comparable<Plane>{
 		
 		Random r = new Random();
 		int dia = r.nextInt(30)+1;
-		
-		Random f = new Random();
-		int mes = f.nextInt(12)+1;
 
-		Random a = new Random();
-		int año = a.nextInt(79)+1999;
+		int mes = r.nextInt(12)+1;
+
+		int año = r.nextInt(79)+1999;
 		
 		v = año+(mes/100)+(dia/10000);
 		setRealDate(v);
@@ -237,7 +256,7 @@ public class Plane implements Comparable<Plane>{
 		
 	}
 
-	public static Comparator<Plane> compName = new Comparator<Plane>() {
+	public static Comparator<Plane> compName = new Comparator<Plane>() { 
 		public int compare(Plane p1, Plane p2) {
 			return p1.getEnd().compareTo(p2.getEnd());
 		}

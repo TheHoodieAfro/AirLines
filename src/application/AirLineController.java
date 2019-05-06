@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import model.Control;
 import model.Plane;
 
 public class AirLineController {
@@ -24,62 +25,19 @@ public class AirLineController {
 	@FXML private TextField txtBuscar;
 	@FXML private ListView<String> listi;
 	
-	private ArrayList<Plane> planes;
+	private Control cont;
 	
 	//Getters and Setters
 		
 	//Methods
 	public void generarVuelos(ActionEvent event) {
 		
-		if(!txtGenerar.getText().equals("") && Integer.parseInt(txtGenerar.getText()) > 0) {
-			
-			planes = new ArrayList<Plane>();
-			
-			int cantVuelos = Integer.parseInt(txtGenerar.getText());
-			
-			for(int i=0; i<cantVuelos; i++) {
-				try {
-					planes.add(new Plane(i));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			for(int i=0; i<planes.size()-1; i++) {
-				
-				Plane min = planes.get(i);
-				int camb = i;
-				
-				for(int j=i+1; j<planes.size(); j++) {
-					
-					if(planes.get(j).getRealDate()<min.getRealDate()) {
-						
-						min = planes.get(j);
-						camb = j;
-						
-					}
-					
-				}
-				
-				Plane temp = planes.get(i);
-				planes.set(i, min);
-				planes.set(camb,  temp);
-				
-			}
-			
-			ObservableList<String> vuelos = FXCollections.<String>observableArrayList();
-			
-			for(int i=0; i<cantVuelos; i++) {
-				vuelos.add(planes.get(i).info());
-			}
-			
+		ObservableList<String> vuelos = cont.generarVuelos(txtGenerar.getText());
+		
+		if(vuelos != null) {
 			listi.setItems(vuelos);
-			
 		}else {
-			
 			JOptionPane.showMessageDialog(null, "no sea baboso, eliga la cantidad de vuelos a crear (mayor que 0!)", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE);
-			
 		}
 		
 	}
@@ -88,35 +46,7 @@ public class AirLineController {
 		
 		long t1 = System.currentTimeMillis();
 		
-		for(int i=0; i<planes.size()-1; i++) {
-			
-			Plane min = planes.get(i);
-			int camb = i;
-			
-			for(int j=i+1; j<planes.size(); j++) {
-				
-				if(planes.get(j).getRealDate()<min.getRealDate()) {
-					
-					min = planes.get(j);
-					camb = j;
-					
-				}
-				
-			}
-			
-			Plane temp = planes.get(i);
-			planes.set(i, min);
-			planes.set(camb,  temp);
-			
-		}
-		
-		ObservableList<String> vuelos = FXCollections.<String>observableArrayList();
-		
-		for(int i=0; i<planes.size(); i++) {
-			
-			vuelos.add(planes.get(i).info());
-			
-		}
+		ObservableList<String> vuelos = cont.orgFecha();
 		
 		listi.setItems(vuelos);
 		
@@ -125,7 +55,7 @@ public class AirLineController {
 		
 	}
 	
-	public void orgHorario(ActionEvent event) { //seleccion
+/*	public void orgHorario(ActionEvent event) { //seleccion
 		
 		long t1 = System.currentTimeMillis();
 		
@@ -164,9 +94,9 @@ public class AirLineController {
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
 		
-	}
+	}*/
 	
-	public void orgAerolinea(ActionEvent event) {//sort(comparable)
+/*	public void orgAerolinea(ActionEvent event) {//sort(comparable)
 		
 		long t1 = System.currentTimeMillis();
 		
@@ -185,9 +115,9 @@ public class AirLineController {
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
 		
-	}
+	}*/
 	
-	public void orgNumero(ActionEvent event) {//insercion
+/*	public void orgNumero(ActionEvent event) {//insercion
 		
 		long t1 = System.currentTimeMillis();
 		
@@ -216,9 +146,9 @@ public class AirLineController {
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
 		
-	}
+	}*/
 	
-	public void orgDestino(ActionEvent event) {//sort(comparator)
+/*	public void orgDestino(ActionEvent event) {//sort(comparator)
 		
 		long t1 = System.currentTimeMillis();
 		
@@ -238,9 +168,9 @@ public class AirLineController {
 		long t = t2-t1;
 		System.out.println(t);
 		
-	}
+	}*/
 	
-	public void orgPuerta(ActionEvent event) {//insercion
+/*	public void orgPuerta(ActionEvent event) {//insercion
 		
 		long t1 = System.currentTimeMillis();
 		
@@ -269,21 +199,14 @@ public class AirLineController {
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
 			
-	}
+	}*/
 	
 	public void buscFecha(ActionEvent event) {//secuencial
 		
 		long t1 = System.currentTimeMillis();
 		
-		String msj = "No se encuentra ningun vuelo con esta fecha";
-		
-		for(int i=0; i<planes.size(); i++) {
-			if(planes.get(i).getDate().compareToIgnoreCase(txtBuscar.getText()) == 0) {
-				msj = planes.get(i).info();
-			}
-		}
-		
-		JOptionPane.showMessageDialog(null, msj);
+		JOptionPane.showMessageDialog(null, cont.buscFecha(txtBuscar.getText()));
+		txtBuscar.setText("");
 		
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
@@ -294,29 +217,8 @@ public class AirLineController {
 		
 		long t1 = System.currentTimeMillis();
 		
-		String msj = "No se encuentra ningun vuelo con este horario";
-		
-		boolean enc = false;
-		int ini = 0;
-		int fin = planes.size() - 1;
-		
-		while(ini <= fin && !enc) {
-			
-			int med = (ini + fin) / 2;
-			
-			if(planes.get(med).getTime().compareToIgnoreCase(txtBuscar.getText()) == 0) {
-				enc = true;
-				msj = planes.get(med).info();
-			}
-			if(planes.get(med).getTime().compareToIgnoreCase(txtBuscar.getText()) > 0) {
-				fin = med-1;
-			}else {
-				ini = med+1;
-			}
-			
-		}
-		
-		JOptionPane.showMessageDialog(null, msj);
+		JOptionPane.showMessageDialog(null, cont.buscHorario(txtBuscar.getText()));
+		txtBuscar.setText("");
 		
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
@@ -327,15 +229,8 @@ public class AirLineController {
 		
 		long t1 = System.currentTimeMillis();
 		
-		String msj = "No se encuentra ningun vuelo con esta Aerolinea";
-		
-		for(int i=0; i<planes.size(); i++) {
-			if(planes.get(i).getAirline().compareToIgnoreCase(txtBuscar.getText()) == 0) {
-				msj = planes.get(i).info();
-			}
-		}
-		
-		JOptionPane.showMessageDialog(null, msj);
+		JOptionPane.showMessageDialog(null, cont.buscAerolinea(txtBuscar.getText()));
+		txtBuscar.setText("");
 		
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
@@ -346,29 +241,8 @@ public class AirLineController {
 		
 		long t1 = System.currentTimeMillis();
 		
-		String msj = "No se encuentra ningun vuelo con este numero";
-		
-		boolean enc = false;
-		int ini = 0;
-		int fin = planes.size() - 1;
-		
-		while(ini <= fin && !enc) {
-			
-			int med = (ini + fin) / 2;
-			
-			if(planes.get(med).getId() == Integer.parseInt(txtBuscar.getText())) {
-				enc = true;
-				msj = planes.get(med).info();
-			}
-			if(planes.get(med).getId() > Integer.parseInt(txtBuscar.getText())) {
-				fin = med-1;
-			}else {
-				ini = med+1;
-			}
-			
-		}
-		
-		JOptionPane.showMessageDialog(null, msj);
+		JOptionPane.showMessageDialog(null, cont.buscNumero(txtBuscar.getText()));
+		txtBuscar.setText("");
 		
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
@@ -379,15 +253,8 @@ public class AirLineController {
 		
 		long t1 = System.currentTimeMillis();
 		
-		String msj = "No se encuentra ningun vuelo con este destino";
-		
-		for(int i=0; i<planes.size(); i++) {
-			if(planes.get(i).getEnd().compareToIgnoreCase(txtBuscar.getText()) == 0) {
-				msj = planes.get(i).info();
-			}
-		}
-		
-		JOptionPane.showMessageDialog(null, msj);
+		JOptionPane.showMessageDialog(null, cont.buscDestino(txtBuscar.getText()));
+		txtBuscar.setText("");
 		
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
@@ -398,33 +265,16 @@ public class AirLineController {
 		
 		long t1 = System.currentTimeMillis();
 		
-		String msj = "No se encuentra ningun vuelo en esta puerta";
-		
-		boolean enc = false;
-		int ini = 0;
-		int fin = planes.size() - 1;
-		
-		while(ini <= fin && !enc) {
-			
-			int med = (ini + fin) / 2;
-			
-			if(planes.get(med).getDoor() == Integer.parseInt(txtBuscar.getText())) {
-				enc = true;
-				msj = planes.get(med).info();
-			}
-			if(planes.get(med).getDoor() > Integer.parseInt(txtBuscar.getText())) {
-				fin = med-1;
-			}else {
-				ini = med+1;
-			}
-			
-		}
-		
-		JOptionPane.showMessageDialog(null, msj);
+		JOptionPane.showMessageDialog(null, cont.buscPuerta(txtBuscar.getText()));
+		txtBuscar.setText("");
 		
 		long t2 = System.currentTimeMillis();
 		System.out.println(t2-t1);
 		
+	}
+	
+	public void initialize() {
+		cont = new Control();
 	}
 	
 }
